@@ -1,6 +1,7 @@
-const http = require('http');
 const express = require('express');
 const cors = require('cors');
+
+const { sequelize } = require('./models');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -12,4 +13,12 @@ app.use(
   })
 );
 
-app.listen(5500, () => console.log('Server is running at http://localhost:5500'));
+sequelize
+  .sync()
+  .then((result) => {
+    console.log(result);
+    app.listen(5500, () => console.log('Server is running at http://localhost:5500'));
+  })
+  .catch((err) => {
+    console.log(err);
+  });
